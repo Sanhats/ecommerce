@@ -1,0 +1,6 @@
+"use client";
+import { createContext, useContext, useEffect, useState } from "react";
+export type CartItem = { variantId: string; productName: string; sku: string; price: number; quantity: number };
+const CartContext = createContext<{ items: CartItem[]; add: (item: CartItem) => void; remove: (id: string) => void; clear: () => void }>({ items: [], add: () => {}, remove: () => {}, clear: () => {} });
+export function CartProvider({ children }: { children: React.ReactNode }) { const [items, setItems] = useState<CartItem[]>([]); useEffect(() => { const saved = localStorage.getItem("showroom-cart"); if (saved) setItems(JSON.parse(saved)); }, []); useEffect(() => { localStorage.setItem("showroom-cart", JSON.stringify(items)); }, [items]); function add(item: CartItem) { setItems(current => { const existing = current.find(x => x.variantId === item.variantId); return existing ? current.map(x => x.variantId === item.variantId ? { ...x, quantity: x.quantity + item.quantity } : x) : [...current, item]; }); } return <CartContext.Provider value={{ items, add, remove: id => setItems(current => current.filter(item => item.variantId !== id)), clear: () => setItems([]) }}>{children}</CartContext.Provider>; }
+export const useCart = () => useContext(CartContext);
