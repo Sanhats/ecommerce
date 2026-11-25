@@ -399,6 +399,56 @@ td select { border: 1px solid #d5d0c7; background: white; padding: .45rem; borde
 .gluma-copyright { grid-column: 1 / -1; border-top: 1px solid #c99370; padding-top: 1rem; color: #705348; font-size: .65rem; }
 @media (max-width: 800px) { .gluma-header { padding: 0 1.25rem; } .gluma-header nav { display: none; } .gluma-menu { display: inline-block; } .gluma-hero { min-height: 600px; align-items: end; } .gluma-hero-copy { width: 100%; padding: 2.5rem 1.5rem; background: linear-gradient(0deg, #f4d9c3eb, #f4d9c300); } .gluma-story, .gluma-newsletter { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem; } .gluma-story-copy { max-width: none; } .gluma-favorites { padding: 3rem 1.5rem; } .gluma-product-grid { grid-template-columns: repeat(2, 1fr); } .gluma-section-heading { align-items: start; flex-direction: column; gap: 1rem; } .gluma-footer { grid-template-columns: repeat(2, 1fr); padding: 2.5rem 1.5rem 1.2rem; } .gluma-footer-brand { grid-column: 1 / -1; } }
 @media (max-width: 480px) { .gluma-product-grid { gap: .7rem; } .gluma-product-info { display: grid; gap: .35rem; } .gluma-style-banner > div { width: 90%; padding: 1.5rem; } }
+.gluma-detail-store { max-width: 1200px; padding: 0; background: #fffdf9; box-shadow: 0 0 45px #7b6a5d1c; }
+.gluma-shipping-bar { display: flex; justify-content: space-between; padding: .55rem 4rem; background: #f4f2f2; color: #6d625b; font-size: .65rem; }
+.gluma-shipping-bar span { color: #342b26; font-weight: 700; }
+.gluma-product-detail { display: grid; grid-template-columns: 1.08fr .92fr; gap: 3rem; padding: 2.5rem 4rem 4rem; }
+.gluma-detail-media { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: .8rem; align-items: start; }
+.gluma-thumbnails { display: grid; gap: .7rem; }
+.gluma-thumbnails button { padding: 0; border: 1px solid transparent; background: #f0e9e2; cursor: pointer; overflow: hidden; }
+.gluma-thumbnails button.is-selected { border-color: #332a24; }
+.gluma-thumbnails img { display: block; width: 100%; aspect-ratio: .8; object-fit: cover; }
+.gluma-main-image { position: relative; overflow: hidden; background: #eee6df; }
+.gluma-main-image > img, .gluma-detail-placeholder { display: block; width: 100%; aspect-ratio: .82; object-fit: cover; }
+.gluma-detail-placeholder { display: grid; place-items: center; color: #ad8d77; font: 1.5rem Georgia, serif; }
+.gluma-image-badge { position: absolute; right: 1rem; bottom: 1rem; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #fffdf9e8; color: #53463e; }
+.gluma-purchase { padding: 1rem 0; }
+.gluma-product-badge { display: inline-block; padding: .35rem .6rem; border-radius: 4px; background: #f4e5da; color: #b65c39; font-size: .65rem; }
+.gluma-purchase h1 { margin: 1rem 0 .45rem; color: #2a211c; font: 400 clamp(2.3rem, 4vw, 4.2rem)/.95 Georgia, serif; letter-spacing: -.06em; }
+.gluma-purchase-brand { color: #76685f; font-size: .72rem; }
+.gluma-price-row { display: flex; align-items: center; gap: .7rem; margin: 1.5rem 0 1rem; }
+.gluma-price-row strong { color: #2d241f; font-size: 1.5rem; }
+.gluma-price-row del { color: #9a8c83; font-size: .8rem; }
+.gluma-price-row > span { padding: .25rem .4rem; border-radius: 3px; background: #2c2825; color: #fff; font-size: .6rem; font-weight: 700; }
+.gluma-purchase-description { color: #665950; font-size: .8rem; line-height: 1.55; }
+.gluma-option-group { padding: 1rem 0; border-top: 1px solid #e3d9d1; }
+.gluma-option-group > div:first-child { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .7rem; font-size: .72rem; }
+.gluma-option-group > div:first-child span { color: #82746a; }
+.gluma-options { display: flex; flex-wrap: wrap; gap: .5rem; }
+.gluma-options button { min-width: 44px; border: 1px solid #d3c9c1; border-radius: 4px; padding: .65rem .8rem; background: #fffdf9; color: #4a3d35; cursor: pointer; font-size: .72rem; }
+.gluma-options button.is-selected { border-color: #2c2825; background: #2c2825; color: #fff; }
+.gluma-purchase-actions { display: grid; grid-template-columns: auto 1fr auto; gap: .55rem; margin-top: 1rem; }
+.gluma-quantity { display: flex; align-items: center; border: 1px solid #d3c9c1; border-radius: 4px; }
+.gluma-quantity button { width: 30px; height: 100%; border: 0; background: transparent; color: #52463f; cursor: pointer; }
+.gluma-quantity span { min-width: 24px; text-align: center; font-size: .75rem; }
+.gluma-add-button { border: 0; border-radius: 4px; background: #2b2825; color: #fff; cursor: pointer; font: inherit; font-size: .78rem; }
+.gluma-like-button { width: 46px; border: 1px solid #d3c9c1; border-radius: 4px; background: transparent; color: #50433c; cursor: pointer; font-size: 1.3rem; }
+.gluma-detail-perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin: 1.5rem 0; padding: 1rem 0; border-top: 1px solid #e3d9d1; border-bottom: 1px solid #e3d9d1; }
+.gluma-detail-perks span { display: grid; grid-template-columns: auto 1fr; column-gap: .4rem; color: #6c5d53; font-size: .75rem; }
+.gluma-detail-perks b, .gluma-detail-perks small { grid-column: 2; }
+.gluma-detail-perks b { color: #40352e; font-size: .62rem; }
+.gluma-detail-perks small { color: #918178; font-size: .56rem; }
+.gluma-accordions details { border-bottom: 1px solid #e3d9d1; padding: .85rem 0; }
+.gluma-accordions summary { cursor: pointer; color: #493b33; font-size: .75rem; font-weight: 700; }
+.gluma-accordions p { margin: .7rem 0 0; color: #77695f; font-size: .75rem; line-height: 1.55; }
+.gluma-related { padding: 3rem 4rem 4.5rem; background: #f8f2ec; }
+.gluma-related-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+.gluma-related-heading h2 { margin: .5rem 0 0; font: 400 clamp(2rem, 4vw, 3.3rem)/.92 Georgia, serif; letter-spacing: -.06em; }
+.gluma-related-heading h2 em { color: #d46c43; font-style: normal; }
+.gluma-related-heading > a { color: #625047; font-size: .7rem; }
+.gluma-related .gluma-product-grid { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 800px) { .gluma-shipping-bar { padding: .55rem 1.25rem; } .gluma-product-detail { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem 1.25rem 3rem; } .gluma-detail-media { grid-template-columns: 64px minmax(0, 1fr); } .gluma-purchase h1 { font-size: 3rem; } .gluma-related { padding: 2.5rem 1.25rem 3.5rem; } .gluma-related .gluma-product-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .gluma-shipping-bar { font-size: .55rem; } .gluma-shipping-bar span { display: none; } .gluma-purchase-actions { grid-template-columns: 1fr auto; } .gluma-quantity { grid-column: 1 / -1; justify-content: center; height: 38px; } .gluma-add-button { min-height: 42px; } .gluma-detail-perks { grid-template-columns: 1fr; } }
 .quantity-control { display: flex; gap: .7rem; align-items: center; margin-top: .6rem; }
 .quantity-control button { width: 25px; height: 25px; border: 1px solid #d5d0c7; background: transparent; cursor: pointer; }
 @media (max-width: 800px) { .pos-layout { grid-template-columns: 1fr; } }
