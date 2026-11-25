@@ -82,8 +82,8 @@ p { color: var(--muted); font-size: 1.1rem; line-height: 1.6; max-width: 590px; 
 .product-info details { border-top: 1px solid #d8cfc6; padding: 1rem 0; }
 .product-info summary { cursor: pointer; }
 .notice { padding: 1rem 1.2rem; background: #eee9df; color: var(--muted); max-width: none; }
-.admin-app-shell { min-height: 100vh; display: flex; background: #f4f5f7; color: #20242b; }
-.admin-sidebar { width: 248px; flex: 0 0 248px; min-height: 100vh; display: flex; flex-direction: column; background: #fff; border-right: 1px solid #e4e7eb; }
+.admin-app-shell { height: 100dvh; min-height: 100vh; display: flex; overflow: hidden; background: #f4f5f7; color: #20242b; }
+.admin-sidebar { width: 248px; flex: 0 0 248px; height: 100dvh; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #d9dde2 transparent; background: #fff; border-right: 1px solid #e4e7eb; }
 .admin-brand { height: 72px; padding: 0 1.25rem; display: flex; align-items: center; border-bottom: 1px solid #eef0f2; }
 .admin-brand > a { display: flex; align-items: center; gap: .7rem; }
 .admin-brand-mark, .store-avatar { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: #20242b; color: white; font-weight: 700; }
@@ -102,8 +102,8 @@ p { color: var(--muted); font-size: 1.1rem; line-height: 1.6; max-width: 590px; 
 .admin-nav-icon { width: 1.1rem; text-align: center; color: #8c949e; font-size: 1rem; }
 .admin-nav a.is-active .admin-nav-icon { color: #20242b; }
 .admin-sidebar-bottom { display: grid; gap: .15rem; margin-top: auto; padding: 1rem .75rem; border-top: 1px solid #eef0f2; }
-.admin-workspace { min-width: 0; flex: 1; }
-.admin-topbar { height: 72px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; background: #fff; border-bottom: 1px solid #e4e7eb; }
+.admin-workspace { min-width: 0; min-height: 0; height: 100dvh; flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #d9dde2 transparent; }
+.admin-topbar { position: sticky; top: 0; z-index: 10; height: 72px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; background: #fffffff2; backdrop-filter: blur(12px); border-bottom: 1px solid #e4e7eb; }
 .sidebar-trigger { display: none; border: 0; background: transparent; color: #59616c; font-size: 1.25rem; }
 .admin-breadcrumb { display: flex; align-items: center; gap: .65rem; color: #9aa0a8; font-size: .78rem; }
 .admin-breadcrumb strong { color: #363c44; }
