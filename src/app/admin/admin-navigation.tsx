@@ -24,12 +24,19 @@ const groups = [
   },
 ];
 
-export function AdminNavigation() {
+export function AdminNavigation({ roles }: { roles: string[] }) {
   const pathname = usePathname();
+  const isOwner = roles.includes("owner") || roles.includes("admin");
+  const canOpen = (href: string) => roles.length === 0 || isOwner ||
+    (roles.includes("seller") && ["/admin", "/admin/pedidos", "/admin/ventas", "/admin/products"].includes(href)) ||
+    (roles.includes("warehouse") && ["/admin", "/admin/inventario"].includes(href));
+  const visibleGroups = groups
+    .map((group) => ({ ...group, links: group.links.filter((link) => canOpen(link.href)) }))
+    .filter((group) => group.links.length > 0);
 
   return (
     <nav aria-label="Navegación de administración" className="admin-navigation">
-      {groups.map((group) => (
+      {visibleGroups.map((group) => (
         <div className="admin-nav-group" key={group.label}>
           <p className="admin-nav-label">{group.label}</p>
           {group.links.map((link) => {
