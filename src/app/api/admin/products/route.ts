@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const name = String(body.name || "").trim();
-    const variants = Array.isArray(body.variants) && body.variants.length ? body.variants : [{ sku: body.sku, price: body.price }];
+    const variants = Array.isArray(body.variants) && body.variants.length ? body.variants : [{ sku: body.sku, price: body.price, quantity: body.quantity }];
     const primaryPrice = Number(variants[0]?.price);
     if (!name || !Number.isFinite(primaryPrice) || primaryPrice < 0) return NextResponse.json({ error: "Nombre y precio de la primera variante son obligatorios" }, { status: 400 });
     const { data: { user } } = await (await createServerClient()).auth.getUser();
@@ -26,11 +26,16 @@ export async function POST(request: Request) {
       if (optionError) { await supabase.from("products").delete().eq("id", product.id); return NextResponse.json({ error: optionError.message }, { status: 400 }); }
       optionIds.set(String(optionName), option.id);
     }
-    let variantError = null;
+    let variantError: { message: string } | null = null;
     const createdVariants: { id: string; sku: string }[] = [];
     for (const variant of variants) {
       const generatedSku = `${slugify(name).slice(0, 12).toUpperCase()}-${String(variants.indexOf(variant) + 1).padStart(3, "0")}`;
-      const { data: createdVariant, error } = await supabase.from("product_variants").insert({ product_id: product.id, sku: generatedSku, price: Number(variant.price ?? primaryPrice), compare_at_price: variant.compare_at_price ? Number(variant.compare_at_price) : null }).select("id").single();
+      const stockQuantity = Number(variant.quantity ?? variant.stock_quantity ?? 0);
+      if (!Number.isInteger(stockQuantity) || stockQuantity < 0) {
+        variantError = { message: "La cantidad inicial debe ser un número entero mayor o igual a cero" };
+        break;
+      }
+      const { data: createdVariant, error } = await supabase.from("product_variants").insert({ product_id: product.id, sku: generatedSku, price: Number(variant.price ?? primaryPrice), compare_at_price: variant.compare_at_price ? Number(variant.compare_at_price) : null, stock_quantity: stockQuantity }).select("id").single();
       if (error) { variantError = error; break; }
       createdVariants.push({ id: createdVariant.id, sku: generatedSku });
       for (const [nameKey, value] of [["Talle", variant.size], ["Color", variant.color]] as const) {

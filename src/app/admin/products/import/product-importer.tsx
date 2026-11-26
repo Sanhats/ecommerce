@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChangeEvent, useMemo, useState } from "react";
 
 type CsvRow = Record<string, string>;
-type ImportProduct = { name: string; slug?: string; description?: string; brand?: string; gender?: string; status?: string; category?: string; collections?: string[]; image_url?: string; variants: { sku?: string; price: string; compare_at_price?: string; size?: string; color?: string }[] };
+type ImportProduct = { name: string; slug?: string; description?: string; brand?: string; gender?: string; status?: string; category?: string; collections?: string[]; image_url?: string; variants: { sku?: string; price: string; compare_at_price?: string; stock_quantity?: string; size?: string; color?: string }[] };
 
 function parseCsv(input: string): CsvRow[] {
   const rows: string[][] = [];
@@ -28,13 +28,13 @@ function groupRows(rows: CsvRow[]): ImportProduct[] {
     if (!name) return;
     const key = (row.slug || name).trim().toLowerCase();
     const current = grouped.get(key) || { name, slug: row.slug, description: row.description, brand: row.brand, gender: row.gender, status: row.status || "draft", category: row.category_slug || row.category, collections: (row.collection_slugs || row.collections || "").split("|").map(value => value.trim()).filter(Boolean), image_url: row.image_url, variants: [] };
-    current.variants.push({ sku: row.sku, price: row.price, compare_at_price: row.compare_at_price, size: row.size, color: row.color });
+    current.variants.push({ sku: row.sku, price: row.price, compare_at_price: row.compare_at_price, stock_quantity: row.stock_quantity, size: row.size, color: row.color });
     grouped.set(key, current);
   });
   return [...grouped.values()];
 }
 
-const template = "name,slug,description,brand,gender,status,category_slug,collection_slugs,price,compare_at_price,size,color,sku,image_url\nVestido Aura,vestido-aura,Vestido midi de lino,Lunora,Mujer,active,vestidos,primavera-verano-2026|nuevos-ingresos,68900,,M,Crudo,,https://...";
+const template = "name,slug,description,brand,gender,status,category_slug,collection_slugs,price,compare_at_price,stock_quantity,size,color,sku,image_url\nVestido Aura,vestido-aura,Vestido midi de lino,Lunora,Mujer,active,vestidos,primavera-verano-2026|nuevos-ingresos,68900,,12,M,Crudo,,https://...";
 
 export default function ProductImporter() {
   const [fileName, setFileName] = useState(""), [rows, setRows] = useState<CsvRow[]>([]), [message, setMessage] = useState(""), [loading, setLoading] = useState(false), [result, setResult] = useState<{ imported: number; errors: number } | null>(null);

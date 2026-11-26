@@ -6,9 +6,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const items = Array.isArray(body.items) ? body.items : [];
     if (!items.length || !body.store_id || !body.full_name) return NextResponse.json({ error: "Tienda, cliente y productos son obligatorios" }, { status: 400 });
+    if (items.some((item: { variantId?: string; quantity?: number }) => !item.variantId || !Number.isInteger(Number(item.quantity)) || Number(item.quantity) <= 0)) return NextResponse.json({ error: "Las cantidades de la venta no son válidas" }, { status: 400 });
     const supabase = createAdminClient();
     const ids = items.map((item: { variantId: string }) => item.variantId);
-    const { data: variants, error: variantError } = await supabase.from("product_variants").select("id, sku, price, products!inner(name, store_id)").in("id", ids).eq("is_active", true);
+    const { data: variants, error: variantError } = await supabase.from("product_variants").select("id, sku, price, stock_quantity, reserved_quantity, products!inner(name, store_id)").in("id", ids).eq("is_active", true);
     if (variantError || !variants || variants.length !== ids.length) return NextResponse.json({ error: "Una variante no está disponible" }, { status: 400 });
     const customerQuery = body.customer_id ? supabase.from("customers").select("id").eq("id", body.customer_id).eq("store_id", body.store_id).single() : supabase.from("customers").insert({ store_id: body.store_id, full_name: body.full_name, email: body.email || null, phone: body.phone || null }).select("id").single();
     const { data: customer, error: customerError } = await customerQuery;

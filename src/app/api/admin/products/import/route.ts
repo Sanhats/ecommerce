@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 
 const slugify = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-type ImportVariant = { sku?: string; price: string | number; compare_at_price?: string | number; size?: string; color?: string };
+type ImportVariant = { sku?: string; price: string | number; compare_at_price?: string | number; stock_quantity?: string | number; size?: string; color?: string };
 type ImportProduct = { name: string; slug?: string; description?: string; brand?: string; gender?: string; status?: string; category?: string; collections?: string[]; image_url?: string; variants: ImportVariant[] };
 
 function clean(value: unknown) { return String(value ?? "").trim(); }
@@ -77,8 +77,13 @@ export async function POST(request: Request) {
         const compareAtPrice = clean(variant.compare_at_price) ? Number(variant.compare_at_price) : null;
         const existingVariant = await supabase.from("product_variants").select("id, product_id").eq("sku", sku).maybeSingle();
         if (existingVariant.data && existingVariant.data.product_id !== productId) { variantError = `El SKU ${sku} ya pertenece a otro producto`; break; }
-        const variantPayload = { product_id: productId, sku, price, compare_at_price: compareAtPrice };
-        const variantResult = existingVariant.data ? await supabase.from("product_variants").update(variantPayload).eq("id", existingVariant.data.id).select("id").single() : await supabase.from("product_variants").insert(variantPayload).select("id").single();
+        const hasStock = clean(variant.stock_quantity) !== "";
+        const stockQuantity = hasStock ? Number(variant.stock_quantity) : 0;
+        if (!Number.isInteger(stockQuantity) || stockQuantity < 0) { variantError = `El stock de ${sku} debe ser un entero mayor o igual a cero`; break; }
+        const variantPayload = { product_id: productId, sku, price, compare_at_price: compareAtPrice, stock_quantity: stockQuantity };
+        const variantResult = existingVariant.data
+          ? await supabase.from("product_variants").update(hasStock ? variantPayload : { product_id: productId, sku, price, compare_at_price: compareAtPrice }).eq("id", existingVariant.data.id).select("id").single()
+          : await supabase.from("product_variants").insert(variantPayload).select("id").single();
         if (variantResult.error || !variantResult.data) { variantError = variantResult.error?.message || `No se pudo guardar la variante ${sku}`; break; }
         for (const [optionName, value] of [["Talle", clean(variant.size)], ["Color", clean(variant.color)] as const]) {
           if (!value || !optionIds.has(optionName)) continue;
